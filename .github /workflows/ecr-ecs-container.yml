@@ -32,10 +32,10 @@ on:
 
 env:            
   AWS_REGION: ap-southeast-1           
-  ECR_REPOSITORY: ecr-ecs-container       
-  ECS_SERVICE: wang-service        
-  ECS_CLUSTER: wang-cluster-tf                     
-  CONTAINER_NAME: ecr-ecs-container-sample        
+  ECR_REPOSITORY: container-ecr     
+  ECS_SERVICE: wang2-service        
+  ECS_CLUSTER: wang2-cluster-tf                     
+  CONTAINER_NAME: container-ecr-sample        
                                                
 
 # permissions:
