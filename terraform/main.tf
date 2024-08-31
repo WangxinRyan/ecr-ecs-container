@@ -12,7 +12,7 @@ data "aws_subnets" "public" {
   }
 }
 
-resource "aws_ecr_repository" "demo-repository" {
+resource "aws_ecrpublic_repository" "demo-repository" {
   name                 = "container-ecr"
   # image_tag_mutability = "IMMUTABLE"
 }
