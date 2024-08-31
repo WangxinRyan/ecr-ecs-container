@@ -12,10 +12,41 @@ data "aws_subnets" "public" {
   }
 }
 
+resource "aws_ecr_repository" "demo-repository" {
+  name                 = "container-ecr"
+  # image_tag_mutability = "IMMUTABLE"
+}
+
+resource "aws_ecr_repository_policy" "demo-repo-policy" {
+  repository = aws_ecr_repository.demo-repository.name
+  policy     = <<EOF
+  {
+    "Version": "2008-10-17",
+    "Statement": [
+      {
+        "Sid": "adds full ecr access to the demo repository",
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:CompleteLayerUpload",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetLifecyclePolicy",
+          "ecr:InitiateLayerUpload",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart"
+        ]
+      }
+    ]
+  }
+  EOF
+}
+
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
 
-  cluster_name = "wang-ecs-tf" #Change
+  cluster_name = "wang2-ecs-tf" #Change
 
   fargate_capacity_providers = {
     FARGATE = {
@@ -26,7 +57,7 @@ module "ecs" {
   }
 
   services = {
-    wang-service = { #task def and service name -> #Change
+    wang2-service = { #task def and service name -> #Change
       cpu    = 512
       memory = 1024
 
@@ -35,11 +66,11 @@ module "ecs" {
 
         ecs-sample = { #container name
           essential = true
-          image     = "public.ecr.aws/u2q1a2y8/wang/simple-node-app:latest"
+          image     = "public.ecr.aws/u2q1a2y8/${aws_ecr_repository.demo-repository.name}/simple-app:1.0"
           port_mappings = [
             {
               name          = "ecs-sample" #container name
-              containerPort = 8080
+              containerPort = 9090
               protocol      = "tcp"
             }
           ]
