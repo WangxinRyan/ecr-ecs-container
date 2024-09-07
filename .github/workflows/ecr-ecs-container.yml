@@ -68,7 +68,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
         #REGISTRY_ALIAS: my-ecr-public-registry-alias
         #REPOSITORY: container-ecr-public-repo
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: ${{ 25dbd05b8c42419dd717ffd7d34ca44c94a1923b}}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
